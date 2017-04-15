@@ -130,7 +130,7 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 				hostPath = volume['hostPath'][2:]
 				print("**DEBUG: hostPath is {0}".format(hostPath))
 				app_id=new_app.get('id', {})
-				container_id=new_app.get('container', {}).get('docker',{}).get('image',{})
+				container_id=new_app.get('container', {}).get('docker',{}).get('image',"")
 				volume_containerPath=volume.get('containerPath', {}).replace('/','_')
 				print("**DEBUG: new_app is {0}".format(new_app))				
 				print("**DEBUG: volume is {0}".format(volume))
@@ -280,7 +280,12 @@ if __name__ == "__main__":
 		containers += line.rstrip()
 	#detect if it's just one app - if so, get in list
 	if containers[0]=="{":
-		containers="["+containers+"]" 
+		containers="["+containers+"]"
+	#check if any of the containers does not have an IMAGE. FAIL if so
+	for container in containers:
+		if not 'image' in container['docker']:
+			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(container['id']))
+			exit(1)
 	output_file=open( args['output'], "w")
 	pod = create_pod( args['name'], containers, args['server'] )
 	print( pod, file=output_file )
