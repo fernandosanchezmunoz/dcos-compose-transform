@@ -5,8 +5,8 @@
 # Author: Fernando Sanchez [ fernando at mesosphere.com ]
 
 import os
-from src import marathon_group
-from src import marathon_pod
+import marathon_group
+import marathon_pod
 import logging
 
 if __name__ == "__main__":
