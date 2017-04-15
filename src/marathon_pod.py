@@ -283,7 +283,8 @@ if __name__ == "__main__":
 		containers="["+containers+"]"
 	#check if any of the containers does not have an IMAGE. FAIL if so
 	for container in containers:
-		app = json.loads (container)
+		print('**DEBUG: container is {0}'.format(container))
+		app = json.loads(container)
 		if not 'image' in app['docker']:
 			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(app['id']))
 			exit(1)
