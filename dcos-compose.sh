@@ -27,7 +27,7 @@ MARATHON_POD=$SRC_DIR"/marathon_pod.py"
 if [ -z "$1" ]; then
   echo "** ERROR: no input file received. Enter the full path of a Docker Compose YAML file to convert"
   echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [name]"
-  ls -A1l $BASE_DIR 
+  find $COMPOSE_DIR|grep "yml" 
   #| grep ^d | awk '{print $9}'
   exit 1
 fi
