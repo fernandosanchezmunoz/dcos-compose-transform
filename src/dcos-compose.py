@@ -41,7 +41,7 @@ if __name__ == "__main__":
 	proc = subprocess.Popen( [command], stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()	
 	print("**DEBUG: Output of CONTAINER-TRANSFORM is {0}".format( out ))
-	containers = p.communicate()[0]
+	containers = proc.communicate()[0]
 	print("**DEBUG: containers is {0}".format( containers ))
 	#remove the trailing \n from file
 	for line in containers:
