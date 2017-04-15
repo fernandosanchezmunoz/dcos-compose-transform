@@ -13,9 +13,9 @@ MARATHON_DIR=$BASE_DIR"/marathon"
 WORKING_DIR=$COMPOSE_DIR"/"$APP_NAME
 SRC_DIR=$BASE_DIR"/src"
 DCOS_COMPOSE=$BASE_DIR"/dcos_compose.py"
-OUTPUT_FILE=$MARATHON_DIR"/"APP_NAME".json"
-MARATHON_TEMP_FILE=$MARATHON_DIR"/"$APP_NAME"-marathon_temp.json" 
-COMMAND_PIP_CHECK=$(pip list --format columns|grep container-transform)
+OUTPUT_FILE=$MARATHON_DIR"/"$APP_NAME".json"
+MARATHON_TEMP_FILE=$MARATHON_DIR"/"$APP_NAME"-marathon-units.json" 
+COMMAND_PIP_CHECK=$(pip3 -V)
 COMMAND_PYTHON3_CHECK=$(python3 --version)
 MY_IP=$(ip addr show eth0 | grep -Eo \
  '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
@@ -45,16 +45,16 @@ else
 	exit 1
 fi
 
-#pre-requisites: container-transform
-if [[ $COMMAND_PIP_CHECK == *"container-transform"* ]]; then
-	echo "**INFO: container-transform available."
+#pre-requisites: pip3
+if [[ $COMMAND_PIP_CHECK == *"pip"* ]]; then
+	echo "**INFO: pip3 available."
 else
-	echo "**INFO: container-transform unavailable. Installing..."
-	pip install container-transform
+	echo "**INFO: pip3 unavailable. Please install. Exiting..."
+	exit 1
 fi
 
-#install python requirements etc.
-pip install -r $BASE_DIR/requirements.txt
+#install python requirements etc. (silently)
+pip3 install -r $BASE_DIR/requirements.txt 2>&1
 
 $DCOS_COMPOSE -i $1 -o marathon  > $MARATHON_TEMP_FILE
 echo "***** MARATHON_TEMP.JSON *****"
