@@ -132,6 +132,7 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 				app_id=new_app.get('id', {})
 				container_id=new_app.get('container', {}).get('docker',{}).get('image',{})
 				volume_containerPath=volume.get('containerPath', {}).replace('/','_')
+				print("**DEBUG: new_app is {0}".format(new_app))				
 				print("**DEBUG: volume is {0}".format(volume))
 				print("**DEBUG: app_id is {0}".format(app_id))
 				print("**DEBUG: container_id is {0}".format(container_id))
