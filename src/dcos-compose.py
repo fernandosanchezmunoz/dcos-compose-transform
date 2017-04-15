@@ -5,6 +5,7 @@
 # Author: Fernando Sanchez [ fernando at mesosphere.com ]
 
 import os
+import subprocess
 import marathon_group
 import marathon_pod
 import logging
