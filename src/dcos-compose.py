@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
 	#remove the trailing \n from file
 	#convert to string
-	container_list = ""
+	containers_list = ""
 	for line in json.dumps(containers):
 			containers_list += line.rstrip()
 	#detect if it's just one app - if so, get in list
