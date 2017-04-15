@@ -48,7 +48,7 @@ if __name__ == "__main__":
 	#		containers += line.rstrip()
 	#detect if it's just one app - if so, get in list
 	if containers[0]=="{":
-		containers="["+json.dumps(containers)+"]"
+		containers="["+str(containers)+"]"
 	print("**DEBUG: containers is {0}".format( containers ))	
 	#check if any of the containers does not have an IMAGE. FAIL if so
 	for container in containers:
