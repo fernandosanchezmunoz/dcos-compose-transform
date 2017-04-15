@@ -32,7 +32,7 @@ if __name__ == "__main__":
 		exit(1)
 
 	#translate it with container-transform and get the result
-	command = "container-transform -i compose -o marathon "args['input']
+	command = "container-transform -i compose -o marathon "+args['input']
 	proc = subprocess.Popen( [command], stdout=subprocess.PIPE, shell=True)
 	(containers, err) = proc.communicate()	
 	logger.debug("Output of CONTAINER-TRANSFORM is {0}".format( containers ))
