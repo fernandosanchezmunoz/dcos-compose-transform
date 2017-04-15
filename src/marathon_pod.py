@@ -284,7 +284,7 @@ if __name__ == "__main__":
 	#check if any of the containers does not have an IMAGE. FAIL if so
 	for container in json.loads(containers):
 		print('**DEBUG: container is {0}'.format(container))
-		if not 'image' in container['docker']:
+		if not 'image' in container.get('container',{}).get('docker',{}):
 			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(container['id']))
 			exit(1)
 	output_file=open( args['output'], "w")
