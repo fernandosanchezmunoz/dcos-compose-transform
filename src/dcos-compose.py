@@ -38,9 +38,10 @@ if __name__ == "__main__":
 	#translate it with container-transform and get the result
 	command = "container-transform -i compose -o marathon "+args['input']
 	proc = subprocess.Popen( [command], stdout=subprocess.PIPE, shell=True)
-	(containers, err) = proc.communicate()	
-	logger.debug("Output of CONTAINER-TRANSFORM is {0}".format( containers ))
-
+	(out, err) = proc.communicate()	
+	print("**DEBUG: Output of CONTAINER-TRANSFORM is {0}".format( out ))
+	containers = list( out )
+	print("**DEBUG: containers is {0}".format( containers ))
 	#remove the trailing \n from file
 	for line in containers:
 		containers += line.rstrip()
