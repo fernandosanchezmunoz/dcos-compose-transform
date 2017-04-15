@@ -54,7 +54,7 @@ else
 fi
 
 #install python requirements etc. (silently)
-pip3 install -r $BASE_DIR/requirements.txt 2>&1
+pip3 install -r $BASE_DIR/requirements.txt > /dev/null 2>&1
 
 $DCOS_COMPOSE -i $1 -o marathon  > $MARATHON_TEMP_FILE
 echo "***** MARATHON_TEMP.JSON *****"
