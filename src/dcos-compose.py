@@ -47,6 +47,7 @@ if __name__ == "__main__":
 	for line in containers:
 		containers += line.rstrip()
 	#detect if it's just one app - if so, get in list
+	print("**DEBUG: containers 2 is {0}".format( containers ))
 	if containers[0]=="{":
 		containers="["+containers+"]"
 	#check if any of the containers does not have an IMAGE. FAIL if so
