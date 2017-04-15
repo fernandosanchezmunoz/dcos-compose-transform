@@ -46,10 +46,10 @@ if __name__ == "__main__":
 	#remove the trailing \n from file
 	#convert to string
 	containers_list = ""
-	for line in json.dumps(containers):
-			containers_list += line.rstrip()
-	containers_list = json.loads(containers_list)
-	print("**DEBUG: container_list is {0}".format( containers_list ))	
+	#for line in json.dumps(containers):
+	#		containers_list += line.rstrip()
+	#containers_list = json.loads(containers_list)
+	#print("**DEBUG: container_list is {0}".format( containers_list ))	
 	#detect if it's just one app - if so, get in list
 	if containers[0]=="{":
 		containers_list="["+containers_list+"]"
