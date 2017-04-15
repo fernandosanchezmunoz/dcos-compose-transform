@@ -6,18 +6,44 @@
 #  Finally processes that list and builds a Marathon group out of it, modifying some parameters
 # to adapt it to a DC/OS cluster (e.g. using Marathon's dynamic port assignment and Marathon-LB). 
 
-APP_NAME="$1"
+#variables and environment
+APP_NAME=$(basename "$1")
 BASE_DIR=$PWD
 COMPOSE_DIR=$BASE_DIR"/compose"
+MARATHON_DIR=$BASE_DIR"/marathon"
 WORKING_DIR=$COMPOSE_DIR"/"$APP_NAME
 SRC_DIR=$BASE_DIR"/src"
-
+DCOS_COMPOSE=$BASE_DIR"/dcos_compose.py"
+OUTPUT_FILE=$MARATHON_DIR"/"APP_NAME".json"
+MARATHON_TEMP_FILE=$MARATHON_DIR"/"$APP_NAME"-marathon_temp.json" 
 COMMAND_PIP_CHECK=$(pip list --format columns|grep container-transform)
+COMMAND_PYTHON3_CHECK=$(python3 --version)
 MY_IP=$(ip addr show eth0 | grep -Eo \
  '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
-
 MARATHON_GROUP=$SRC_DIR"/marathon_group.py" 
 MARATHON_POD=$SRC_DIR"/marathon_pod.py"
+
+
+#argument validation
+if [ -z "$1" ]; then
+  echo "** ERROR: no input file received. Enter the full path of a Docker Compose YAML file to convert"
+  echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [DCOS_address]"
+  exit 1
+fi
+
+if [ -z "$2" ]; then
+  echo "** ERROR: no DCOS address specified. Enter the address of a DC/OS cluster to load the application into."
+  echo "** INFO: syntax: dcos_compose.sh -i [full_path_of_YAML_file] [DCOS_address]"
+  exit 1
+fi
+
+#pre-requisites: python3
+if [[ $COMMAND_PYTHON3_CHECK == *"Python 3"* ]]; then
+	echo "**INFO: python3 available."
+else
+	echo "**INFO: python3 unavailable. Please install. Exiting..."
+	exit(1)
+fi
 
 #pre-requisites: container-transform
 if [[ $COMMAND_PIP_CHECK == *"container-transform"* ]]; then
@@ -27,26 +53,17 @@ else
 	pip install container-transform
 fi
 
-#read example name from first argument
-if [ -z "$1" ]; then
-  echo "** ERROR: no parameter received. Enter the name of the subdirectory on "$COMPOSE_DIR" to convert"
-  ls -A1l $COMPOSE_DIR | grep ^d | awk '{print $9}'
-  exit 1
-fi
+#install python requirements etc.
+pip install -r $BASE_DIR/requirements.txt
 
-#change to subdirectory
-cd $WORKING_DIR
-
-container-transform -i compose -o marathon docker-compose.yml > marathon.json 
-echo "***** MARATHON.JSON *****"
-cat marathon.json
-../../src/marathon_pod.py -i marathon.json -n ${PWD##*/} -s $MY_IP #produces group.json
+$DCOS_COMPOSE -i $1 -o marathon  > $MARATHON_TEMP_FILE
+echo "***** MARATHON_TEMP.JSON *****"
+cat $MARATHON_TEMP_FILE
+$MARATHON_POD -i marathon.json -n $APP_NAME -o $OUTPUT_FILE -s $MY_IP #produces group.json
 echo "***** OUTPUT.JSON *****"
-cat output.json
+cat $OUTPUT_FILE
 
 dcos auth login && \
-dcos marathon pod add ./output.json
-
-cd $CURRENT_DIR
+dcos marathon pod add $OUTPUT_FILE
 
 exit 0
