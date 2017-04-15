@@ -12,6 +12,7 @@ COMPOSE_DIR=$BASE_DIR"/compose"
 MARATHON_DIR=$BASE_DIR"/marathon"
 WORKING_DIR=$COMPOSE_DIR"/"$APP_NAME
 SRC_DIR=$BASE_DIR"/src"
+CONTAINER_TRANSFORM="container-trasform"
 DCOS_COMPOSE=$SRC_DIR"/dcos-compose.py"
 OUTPUT_FILE=$MARATHON_DIR"/"$APP_NAME".json"
 MARATHON_TEMP_FILE=$MARATHON_DIR"/"$APP_NAME"-marathon-units.json" 
@@ -59,10 +60,10 @@ fi
 pip3 install -r $BASE_DIR/requirements.txt > /dev/null 2>&1
 
 echo "DCOS COMPOSE: "$DCOS_COMPOSE
-$DCOS_COMPOSE -i $1 -o marathon -n $APP_NAME > $MARATHON_TEMP_FILE
+$CONTAINER_TRANSFORM -i compose -o marathon > $MARATHON_TEMP_FILE
 echo "***** MARATHON_TEMP.JSON *****"
 cat $MARATHON_TEMP_FILE
-$MARATHON_POD -i $MARATHON_TEMP_FILE -n $APP_NAME -o $OUTPUT_FILE -s $MY_IP #produces group.json
+$DCOS_COMPOSE -i $MARATHON_TEMP_FILE -n $APP_NAME -o $OUTPUT_FILE -s $MY_IP #produces group.json
 echo "***** OUTPUT.JSON *****"
 cat $OUTPUT_FILE
 
