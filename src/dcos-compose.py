@@ -55,7 +55,7 @@ if __name__ == "__main__":
 		containers_list="["+containers+"]"
 	print("**DEBUG: container_list is {0}".format( containers_list ))
 	containers_list = list(containers_list)
-	print("**DEBUG: container_list is of type {0}".format( type(containers_list ))	
+	print("**DEBUG: container_list is of type {0}".format( type(containers_list )))	
 	#check if any of the containers does not have an IMAGE. FAIL if so
 	for container in containers_list:
 		print('**DEBUG: container OOP is {0}'.format(container))
