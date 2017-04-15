@@ -41,6 +41,7 @@ if __name__ == "__main__":
 	proc = subprocess.Popen( [command], stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()	
 	containers = out.decode('utf-8')
+	print("**DEBUG: containers pre-rstrip is {0}".format( containers ))	
 
 	#remove the trailing \n from file
 	for line in containers:
