@@ -98,8 +98,11 @@ if __name__ == "__main__":
 			exit(1)
 	output_file=open( args['output'], "w")
 	pod = create_pod( args['name'], container_list, args['server'] )
+	print("**DEBUG: POD is of type {0}".format( type(pod )))	
+	print("**DEBUG: POD is {0}".format( pod ))
+	print("**DEBUG: output_file is {0}".format( output ))
 
-	print( pod, file=output_file )
+	print( pod, file=output )
 
 	input( "***DEBUG: Press ENTER to continue...")
 	sys.exit(0)
