@@ -5,7 +5,8 @@
 # in a pod or group ready to be deployed to a DC/OS cluster.
 
 #variables and environment
-APP_NAME=$(basename "$1")
+COMPOSE_FILE_NAME="$1"
+APP_NAME="$2"
 BASE_DIR=$PWD
 COMPOSE_DIR=$BASE_DIR"/compose"
 MARATHON_DIR=$BASE_DIR"/marathon"
@@ -25,7 +26,14 @@ MARATHON_POD=$SRC_DIR"/marathon_pod.py"
 #argument validation
 if [ -z "$1" ]; then
   echo "** ERROR: no input file received. Enter the full path of a Docker Compose YAML file to convert"
-  echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file]"
+  echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [name]"
+  exit 1
+fi
+
+#argument validation
+if [ -z "$2" ]; then
+  echo "** ERROR: no app name specified. Enter a name for this app."
+  echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [name]"
   exit 1
 fi
 
