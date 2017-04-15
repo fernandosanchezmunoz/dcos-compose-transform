@@ -25,13 +25,7 @@ MARATHON_POD=$SRC_DIR"/marathon_pod.py"
 #argument validation
 if [ -z "$1" ]; then
   echo "** ERROR: no input file received. Enter the full path of a Docker Compose YAML file to convert"
-  echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [DCOS_address]"
-  exit 1
-fi
-
-if [ -z "$2" ]; then
-  echo "** ERROR: no DCOS address specified. Enter the address of a DC/OS cluster to load the application into."
-  echo "** INFO: syntax: dcos_compose.sh -i [full_path_of_YAML_file] [DCOS_address]"
+  echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file]"
   exit 1
 fi
 
