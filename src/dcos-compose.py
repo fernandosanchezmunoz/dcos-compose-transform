@@ -44,8 +44,8 @@ if __name__ == "__main__":
 	print("**DEBUG: containers pre-rstrip is {0}".format( containers ))	
 
 	#remove the trailing \n from file
-	for line in containers:
-		containers += line.rstrip()
+	#for line in containers:
+	#		containers += line.rstrip()
 	#detect if it's just one app - if so, get in list
 	if containers[0]=="{":
 		containers="["+containers+"]"
