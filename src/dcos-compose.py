@@ -52,10 +52,10 @@ if __name__ == "__main__":
 	#print("**DEBUG: container_list is {0}".format( containers_list ))	
 	#detect if it's just one app - if so, get in list
 	if containers[0]=="{":
-		containers_list="["+containers_list+"]"
+		containers_list="["+containers+"]"
 	print("**DEBUG: container_list is {0}".format( containers_list ))	
 	#check if any of the containers does not have an IMAGE. FAIL if so
-	for container in containers_list:
+	for container in list(containers_list):
 		print('**DEBUG: container OOP is {0}'.format(container))
 		if not 'image' in container.get('container',{}).get('docker',{}):
 			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(container['id']))
