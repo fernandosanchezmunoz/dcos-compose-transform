@@ -1,5 +1,5 @@
 web:
-  build: .
+  image: fernandosanchez/01-express-nodemon
   #image: fernandosanchez/01-express-nodemon
   volumes:
     - "./app:/src/app"
