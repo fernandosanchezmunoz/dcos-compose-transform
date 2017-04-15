@@ -1,0 +1,28 @@
+{
+    "acceptedResourceRoles": [],
+    "container": {
+        "docker": {
+            "forcePullImage": true,
+            "image": "fernandosanchez/01-express-nodemon",
+            "network": "BRIDGE",
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "hostPort": 3030,
+                    "protocol": "tcp"
+                }
+            ]
+        },
+        "type": "DOCKER",
+        "volumes": [
+            {
+                "containerPath": "/src/app",
+                "hostPath": "./app",
+                "mode": "RW"
+            }
+        ]
+    },
+    "fetch": [],
+    "id": "web",
+    "requirePorts": true
+}
