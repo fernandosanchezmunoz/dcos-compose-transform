@@ -282,7 +282,7 @@ if __name__ == "__main__":
 	if containers[0]=="{":
 		containers="["+containers+"]"
 	#check if any of the containers does not have an IMAGE. FAIL if so
-	for container in containers:
+	for container in json.loads(containers):
 		print('**DEBUG: container is {0}'.format(container))
 		app = json.loads(container)
 		if not 'image' in app['docker']:
