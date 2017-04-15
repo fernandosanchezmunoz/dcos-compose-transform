@@ -284,9 +284,8 @@ if __name__ == "__main__":
 	#check if any of the containers does not have an IMAGE. FAIL if so
 	for container in json.loads(containers):
 		print('**DEBUG: container is {0}'.format(container))
-		app = json.loads(container)
-		if not 'image' in app['docker']:
-			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(app['id']))
+		if not 'image' in container['docker']:
+			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(container['id']))
 			exit(1)
 	output_file=open( args['output'], "w")
 	pod = create_pod( args['name'], containers, args['server'] )
