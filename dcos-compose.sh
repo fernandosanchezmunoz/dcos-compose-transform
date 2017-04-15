@@ -60,7 +60,7 @@ fi
 pip3 install -r $BASE_DIR/requirements.txt > /dev/null 2>&1
 
 echo "DCOS COMPOSE: "$DCOS_COMPOSE
-$CONTAINER_TRANSFORM -i compose -o marathon > $MARATHON_TEMP_FILE
+$CONTAINER_TRANSFORM -i compose -o marathon $1 > $MARATHON_TEMP_FILE
 echo "***** MARATHON_TEMP.JSON *****"
 cat $MARATHON_TEMP_FILE
 $DCOS_COMPOSE -i $MARATHON_TEMP_FILE -n $APP_NAME -o $OUTPUT_FILE -s $MY_IP #produces group.json
