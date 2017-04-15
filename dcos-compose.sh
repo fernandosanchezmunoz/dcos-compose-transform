@@ -34,7 +34,7 @@ if [[ $COMMAND_PYTHON3_CHECK == *"Python 3"* ]]; then
 	echo "**INFO: python3 available."
 else
 	echo "**INFO: python3 unavailable. Please install. Exiting..."
-	exit(1)
+	exit 1
 fi
 
 #pre-requisites: container-transform
