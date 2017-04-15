@@ -26,6 +26,8 @@ if __name__ == "__main__":
 	parser.add_argument('-o', '--output', help='full path of the file to write output JSON to', required=False, default='output.json')
 	args = vars( parser.parse_args() )
 
+	print('**DEBUG: input file is {0}'.format(args['input']))
+
 	#get the docker compose file
 	try:
 		compose_file = open( args['input'], "r")
@@ -34,7 +36,6 @@ if __name__ == "__main__":
 		exit(1)
 
 	#translate it with container-transform and get the result
-	print('**DEBUG: input file is {0}'.format(args['input']))
 	command = "container-transform -i compose -o marathon "+args['input']
 	proc = subprocess.Popen( [command], stdout=subprocess.PIPE, shell=True)
 	(containers, err) = proc.communicate()	
