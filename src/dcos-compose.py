@@ -40,16 +40,15 @@ if __name__ == "__main__":
 	command = "container-transform -i compose -o marathon "+args['input']
 	proc = subprocess.Popen( [command], stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()	
-	print("**DEBUG: Output of CONTAINER-TRANSFORM is {0}".format( out ))
 	containers = out.decode('utf-8')
-	print("**DEBUG: containers is {0}".format( containers ))
+
 	#remove the trailing \n from file
 	for line in containers:
 		containers += line.rstrip()
 	#detect if it's just one app - if so, get in list
-	print("**DEBUG: containers 2 is {0}".format( containers ))
 	if containers[0]=="{":
 		containers="["+containers+"]"
+	print("**DEBUG: containers is {0}".format( containers ))	
 	#check if any of the containers does not have an IMAGE. FAIL if so
 	for container in json.loads(containers):
 		print('**DEBUG: container is {0}'.format(container))
