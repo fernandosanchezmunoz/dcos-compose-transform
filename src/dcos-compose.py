@@ -57,7 +57,7 @@ if __name__ == "__main__":
 	containers_list = list(containers_list)
 	print("**DEBUG: container_list is of type {0}".format( type(containers_list ))	
 	#check if any of the containers does not have an IMAGE. FAIL if so
-	for container in list(containers_list):
+	for container in containers_list:
 		print('**DEBUG: container OOP is {0}'.format(container))
 		if not 'image' in container.get('container',{}).get('docker',{}):
 			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(container['id']))
