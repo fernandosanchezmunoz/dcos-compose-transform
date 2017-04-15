@@ -1,10 +1,8 @@
 #!/bin/bash
 
-#   Reads a "docker-compose.yml" file located in a directory with the application name:
-# (e.g. ./data/redis/docker-compose.yml).
-#  Creates a marathon.json out of it with a list of the containers included in the YML. 
-#  Finally processes that list and builds a Marathon group out of it, modifying some parameters
-# to adapt it to a DC/OS cluster (e.g. using Marathon's dynamic port assignment and Marathon-LB). 
+# Reads a "docker-compose.yml" file passed as a parameter.
+# Creates an output Marathon JSON file with a list of the containers included in the YML embedded 
+# in a pod or group ready to be deployed to a DC/OS cluster.
 
 #variables and environment
 APP_NAME=$(basename "$1")

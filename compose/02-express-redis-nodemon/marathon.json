@@ -1,0 +1,46 @@
+[
+    {
+        "acceptedResourceRoles": [],
+        "container": {
+            "docker": {
+                "forcePullImage": true,
+                "image": "redis",
+                "network": "BRIDGE"
+            },
+            "type": "DOCKER"
+        },
+        "fetch": [],
+        "id": "db"
+    },
+    {
+        "acceptedResourceRoles": [],
+        "container": {
+            "docker": {
+                "forcePullImage": true,
+                "image": "fernandosanchez/02-express-redis-nodemon",
+                "network": "BRIDGE",
+                "portMappings": [
+                    {
+                        "containerPort": 3000,
+                        "hostPort": 3030,
+                        "protocol": "tcp"
+                    }
+                ]
+            },
+            "type": "DOCKER",
+            "volumes": [
+                {
+                    "containerPath": "/src/app",
+                    "hostPath": "./app",
+                    "mode": "RW"
+                }
+            ]
+        },
+        "dependencies": [
+            "/db:redis"
+        ],
+        "fetch": [],
+        "id": "web",
+        "requirePorts": true
+    }
+]
