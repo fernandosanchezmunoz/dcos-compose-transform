@@ -40,7 +40,7 @@ cd $WORKING_DIR
 container-transform -i compose -o marathon docker-compose.yml > marathon.json 
 echo "***** MARATHON.JSON *****"
 cat marathon.json
-../../container_transform/marathon_group.py -i marathon.json -n ${PWD##*/} -s $MY_IP #produces group.json
+../../src/marathon_pod.py -i marathon.json -n ${PWD##*/} -s $MY_IP #produces group.json
 echo "***** OUTPUT.JSON *****"
 cat output.json
 
