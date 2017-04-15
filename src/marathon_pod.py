@@ -15,6 +15,7 @@ def create_pod( name, apps, app_server_address ):
 	Creates a marathon pod taking a list of apps as a parameter.
 	If the list has a single member if returns the member.
 	"""
+
 	#get relevant information of first container
 	#first_container = json.loads( containers[0] )
 	#get port mapping
@@ -131,6 +132,11 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 				app_id=new_app.get('id', {})
 				container_id=new_app.get('container', {}).get('docker',{}).get('image',{})
 				volume_containerPath=volume.get('containerPath', {}).replace('/','_')
+				print("**DEBUG: volume is {0}".format(volume))
+				print("**DEBUG: app_id is {0}".format(app_id))
+				print("**DEBUG: container_id is {0}".format(container_id))
+				print("**DEBUG: volume_containerPath is {0}".format(volume_containerPath))
+				print("**DEBUG: app_server_address is {0}".format(app_server_address))				
 				artifact_name = create_artifact_from_volume( volume, app_id+'-'+container_id+'-'+volume_containerPath, app_server_address )
 				print("**DEBUG: ARTIFACT NAME is {0}".format(artifact_name))
 				uri = "http://"+app_server_address+"/"+artifact_name
