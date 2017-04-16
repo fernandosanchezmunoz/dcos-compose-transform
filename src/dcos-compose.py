@@ -103,6 +103,7 @@ if __name__ == "__main__":
 	#move to the app's base directory to run create_pod
 	current_dir = os.getcwd()
 	app_dir = os.path.dirname( args['input'] )
+	print("**DEBUG: app_Dir is {0}".format( app_dir))	
 	os.chdir( app_dir )
 	pod = marathon_pod.create_pod( args['name'], json.dumps(containers_list), args['server'] )
 	print("**DEBUG: POD is of type {0}".format( type(pod )))	
