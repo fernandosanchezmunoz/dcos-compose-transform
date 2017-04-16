@@ -65,17 +65,19 @@ if __name__ == "__main__":
 
 	#get the docker compose file
 	try:
-		compose_file = open( args['input'], "r")
+		container-transform_file = open( args['input'], "r")
 	except (OSError, IOError):
 		logger.error("File {0} not found".format( args['input'] ))
 		exit(1)
 
 	#translate it with container-transform and get the result
-	command = "container-transform -i compose -o marathon "+args['input']
-	proc = subprocess.Popen( [command], stdout=subprocess.PIPE, shell=True)
-	(out, err) = proc.communicate()	
-	containers = out.decode('utf-8')
-	print("**DEBUG: containers pre-rstrip is {0}".format( containers ))	
+	#command = "container-transform -i compose -o marathon "+args['input']
+	#proc = subprocess.Popen( [command], stdout=subprocess.PIPE, shell=True)
+	#(out, err) = proc.communicate()	
+	#containers = out.decode('utf-8')
+	#print("**DEBUG: containers pre-rstrip is {0}".format( containers ))	
+
+	containers = container-transform_file.read()
 
 	#remove the trailing \n from file
 	#convert to string
@@ -83,7 +85,7 @@ if __name__ == "__main__":
 	#for line in json.dumps(containers):
 	#		containers_list += line.rstrip()
 	#containers_list = json.loads(containers_list)
-	#print("**DEBUG: container_list is {0}".format( containers_list ))	
+	print("**DEBUG: containers is {0}".format( containers ))	
 	#detect if it's just one app - if so, get in list
 	if containers[0]=="{":
 		containers_list="["+containers+"]"
