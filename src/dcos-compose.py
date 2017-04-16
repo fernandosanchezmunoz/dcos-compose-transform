@@ -65,7 +65,8 @@ if __name__ == "__main__":
 
 	#get the docker compose file
 	try:
-		container-transform_file = open( args['input'], "r")
+		with open( args['input'], "r") as input_file:
+			containers = input_file.read()
 	except (OSError, IOError):
 		logger.error("File {0} not found".format( args['input'] ))
 		exit(1)
@@ -77,7 +78,7 @@ if __name__ == "__main__":
 	#containers = out.decode('utf-8')
 	#print("**DEBUG: containers pre-rstrip is {0}".format( containers ))	
 
-	containers = container-transform_file.read()
+	
 
 	#remove the trailing \n from file
 	#convert to string
