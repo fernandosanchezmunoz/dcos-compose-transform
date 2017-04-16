@@ -100,7 +100,7 @@ if __name__ == "__main__":
 			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(container['id']))
 			exit(1)
 	output_file=open( args['output'], "w")
-	pod = marathon_pod.create_pod( args['name'], containers_list, args['server'] )
+	pod = marathon_pod.create_pod( args['name'], json.dumps(containers_list), args['server'] )
 	print("**DEBUG: POD is of type {0}".format( type(pod )))	
 	print("**DEBUG: POD is {0}".format( pod ))
 	print("**DEBUG: output_file is {0}".format( output ))
