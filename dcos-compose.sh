@@ -6,7 +6,7 @@
 
 #variables and environment
 COMPOSE_FILE_NAME="$1"
-APP_NAME=$(basename $COMPOSE_FILE_NAME)  
+APP_NAME="$2"
 BASE_DIR=$PWD
 COMPOSE_DIR=$BASE_DIR"/compose"
 MARATHON_DIR=$BASE_DIR"/marathon"
@@ -15,7 +15,8 @@ SRC_DIR=$BASE_DIR"/src"
 CONTAINER_TRANSFORM="container-transform"
 DCOS_COMPOSE=$SRC_DIR"/dcos-compose.py"
 OUTPUT_FILE=$MARATHON_DIR"/"$APP_NAME".json"
-MARATHON_TEMP_FILE=$WORKING_DIR"/"$APP_NAME"-marathon-units.json" 
+#MARATHON_TEMP_FILE=$WORKING_DIR"/"$APP_NAME"-marathon-units.json" 
+MARATHON_TEMP_FILE=$(dirname $1)/"$APP_NAME"-marathon-units.json" 
 COMMAND_PIP_CHECK=$(pip3 -V)
 COMMAND_PYTHON3_CHECK=$(python3 --version)
 MY_IP=$(ip addr show eth0 | grep -Eo \
@@ -30,6 +31,13 @@ if [ -z "$1" ]; then
   echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [name]"
   find $COMPOSE_DIR|grep "yml" 
   #| grep ^d | awk '{print $9}'
+  exit 1
+fi
+
+#argument validation
+if [ -z "$2" ]; then
+  echo "** ERROR: no app name specified. Enter a name for this app."
+  echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [name]"
   exit 1
 fi
 
@@ -56,7 +64,7 @@ echo "DCOS COMPOSE: "$DCOS_COMPOSE
 $CONTAINER_TRANSFORM -i compose -o marathon $1 > $MARATHON_TEMP_FILE
 echo "***** MARATHON_TEMP.JSON *****"
 cat $MARATHON_TEMP_FILE
-$DCOS_COMPOSE -i $MARATHON_TEMP_FILE -n $APP_NAME -o $OUTPUT_FILE -s $MY_IP #produces group.json
+$DCOS_COMPOSE -i $MARATHON_TEMP_FILE -n $APP_NAME -o $OUTPUT_FILE -s $MY_IP #produces output.json
 echo "***** OUTPUT.JSON *****"
 cat $OUTPUT_FILE
 
