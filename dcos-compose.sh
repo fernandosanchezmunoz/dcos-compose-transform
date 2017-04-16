@@ -6,7 +6,7 @@
 
 #variables and environment
 COMPOSE_FILE_NAME="$1"
-APP_NAME="$2"
+APP_NAME=${COMPOSE_FILE_NAME##*/}  
 BASE_DIR=$PWD
 COMPOSE_DIR=$BASE_DIR"/compose"
 MARATHON_DIR=$BASE_DIR"/marathon"
@@ -30,13 +30,6 @@ if [ -z "$1" ]; then
   echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [name]"
   find $COMPOSE_DIR|grep "yml" 
   #| grep ^d | awk '{print $9}'
-  exit 1
-fi
-
-#argument validation
-if [ -z "$2" ]; then
-  echo "** ERROR: no app name specified. Enter a name for this app."
-  echo "** INFO: syntax: dcos_compose.sh [full_path_of_YAML_file] [name]"
   exit 1
 fi
 
