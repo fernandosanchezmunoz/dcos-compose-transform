@@ -110,7 +110,7 @@ if __name__ == "__main__":
 	print("**DEBUG: POD is {0}".format( pod ))
 	print("**DEBUG: output_file is {0}".format( args['output'] ))
 
-	print( pod, file=output )
+	print( pod, file=args['output'] )
 	os.chdir( current_dir )
 	input( "***DEBUG: Press ENTER to continue...")
 	sys.exit(0)
