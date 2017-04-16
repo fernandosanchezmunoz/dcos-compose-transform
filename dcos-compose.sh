@@ -6,7 +6,7 @@
 
 #variables and environment
 COMPOSE_FILE_NAME="$1"
-APP_NAME=$(basename COMPOSE_FILE_NAME)  
+APP_NAME=$(basename $COMPOSE_FILE_NAME)  
 BASE_DIR=$PWD
 COMPOSE_DIR=$BASE_DIR"/compose"
 MARATHON_DIR=$BASE_DIR"/marathon"
