@@ -108,7 +108,7 @@ if __name__ == "__main__":
 	pod = marathon_pod.create_pod( args['name'], json.dumps(containers_list), args['server'] )
 	print("**DEBUG: POD is of type {0}".format( type(pod )))	
 	print("**DEBUG: POD is {0}".format( pod ))
-	print("**DEBUG: output_file is {0}".format( output ))
+	print("**DEBUG: output_file is {0}".format( args[output] ))
 
 	print( pod, file=output )
 	os.chdir( current_dir )
