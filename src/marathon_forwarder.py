@@ -34,7 +34,7 @@ if __name__ == "__main__":
 		for endpoint in container.get( 'endpoints', [] ):
 			for label in endpoint.get( 'labels', {} ):
 				print("**DEBUG: label is {0}".format(label))
-				print("**DEBUG: label is of type {0}".format(typeof(label)))
+				print("**DEBUG: label is of type {0}".format(type(label)))
 				if 'VIP_0' in label:
 					vips.append( label['VIP_0'] )
 
