@@ -61,13 +61,11 @@ if __name__ == "__main__":
 		vip_port = vip[-4:]
 		vip_name = vip[1:-5]
 		print("**DEBUG: vip_name is {0} and vip_port is {1}".format(vip_name, vip_port))
-		forwarder['labels']['HAPROXY_'+str(index)+'_BACKEND_SERVER_OPTIONS'] = vip_name+".marathon.l4lb.thisdcos.directory:"+vip_port
+		forwarder['labels']['HAPROXY_'+str(index)+'_BACKEND_SERVER_OPTIONS'] = "server "+vip_name+" "+vip_name+".marathon.l4lb.thisdcos.directory:"+vip_port
 		mapping = { 			
 			"containerPort" : 80,
 			"hostPort" : 0,
 			"servicePort" : int(vip_port)
-			} 
-		forwarder['container']['docker']['portMappings'].append( mapping )
 
 	print( json.dumps( forwarder ), file=open(args['output'], "w" ))
 
