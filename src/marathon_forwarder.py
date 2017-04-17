@@ -46,15 +46,17 @@ if __name__ == "__main__":
 	forwarder['container']['docker'] = {}
 	forwarder['container']['docker']['image'] = "nginx"
 	forwarder['container']['docker']['network'] = "BRIDGE"
-	forwarder['container']['docker']['portMappings'] = [{ 
-		"containerPort" = 80,
-		"hostPort" = 0
-		}]
-	forwarder['healthChecks'] = [{
-		"path" = "/",
-		"protocol" = "MESOS_HTTP",
-		"portIndex" = 0
-	}]
+	forwarder['container']['docker']['portMappings'] = []
+	forwarder['container']['docker']['portMappings'].append( { 
+		"containerPort" : 80,
+		"hostPort" : 0
+		} )
+	forwarder['healthChecks'] = []
+	forwarder['healthChecks'].append( {
+		"path" : "/",
+		"protocol" : "MESOS_HTTP",
+		"portIndex" : 0
+		} )
 	forwarder['labels'] = { "HAPROXY_GROUP": "external" }
 	for vip, index in enumerate( vips ):
 		forwarder['labels']['HAPROXY_'+str(index-1)+BACKEND_SERVER_OPTIONS]: vip
