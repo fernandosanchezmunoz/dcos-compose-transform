@@ -9,6 +9,7 @@ import sys
 import argparse
 import subprocess
 import os
+import socket
 
 def create_group ( name, containers ):
 	"""
@@ -22,7 +23,7 @@ def create_group ( name, containers ):
 
 	return str(output)
 
-def create_artifact_from_volume( volume, app_name, app_server_address ):
+def create_artifact_from_volume( volume, app_name ):
 	"""
 	Compress and copy the application in "source_path". Upload it to "app_server_address" so that it can be downloaded as URI.
 	"""
@@ -126,7 +127,7 @@ def create_artifact_from_volume( volume, app_name, app_server_address ):
 
 	return artifact_name
 
-def modify_group ( group, app_server_address ):
+def modify_group ( group ):
 	"""
 	Modifies a marathon group received as a printable string to adapt the apps inside it 
 	to the desired parameters.
@@ -138,6 +139,12 @@ def modify_group ( group, app_server_address ):
 	"""
 
 	group_dict = json.loads( group )
+
+	#find out my address
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	s.connect(("8.8.8.8", 53))
+	my_address = print(s.getsockname()[0])
+	s.close()
 
 	for app in group_dict['apps']:
 		app['acceptedResourceRoles']=["*"]
@@ -163,8 +170,8 @@ def modify_group ( group, app_server_address ):
 				#volume = modify_volume_for_external( volume, group_dict['id']+'-'+app['id'] )	
 						#modify it so that the local files are reachable via external volume
 				#SECOND CASE: generate an artifact with the code in the local volume and add it as a URI
-				artifact_name = create_artifact_from_volume( volume, group_dict['id']+'-'+app['id'], app_server_address )
-				uri = "http://"+app_server_address+"/"+artifact_name
+				artifact_name = create_artifact_from_volume( volume, group_dict['id']+'-'+app['id'] )
+				uri = "http://"+my_address+"/"+artifact_name
 				if 'uris' in app:
 					app['uris'].append( uri )
 				else:

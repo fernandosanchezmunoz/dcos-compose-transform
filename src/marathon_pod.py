@@ -10,7 +10,7 @@ import argparse
 import subprocess
 import os
 
-def create_pod( name, apps, app_server_address ):
+def create_pod( name, apps ):
 	"""
 	Creates a marathon pod taking a list of apps as a parameter.
 	If the list has a single member if returns the member.
@@ -25,7 +25,7 @@ def create_pod( name, apps, app_server_address ):
 	#pod_disk=50
 
 	#adapt all containers to pod format
-	pod_apps, hostPath = adapt_apps_to_pod( apps, name, app_server_address )
+	pod_apps, hostPath = adapt_apps_to_pod( apps, name )
 
 	output = '{ 									\
 	  "id": "/'+name+'",							\
@@ -51,7 +51,7 @@ def create_pod( name, apps, app_server_address ):
 
 	return str(output)
 
-def adapt_apps_to_pod( apps, name, app_server_address ):
+def adapt_apps_to_pod( apps, name ):
 	"""
 	Receives a list of apps in Marathon single container format.
 	Returns a list of those containers adapted to the Marathon pod format.
@@ -73,7 +73,7 @@ def adapt_apps_to_pod( apps, name, app_server_address ):
 		}
 		#adapt volumes
 		#print("**DEBUG: app is {0}".format(app))
-		app_uris, hostPath = adapt_app_volumes_for_uri( app, app_server_address )
+		app_uris, hostPath = adapt_app_volumes_for_uri( app )
 		#print("**DEBUG: app with URIs is {0}".format(app_uris))
 		temp_app['volumeMounts'] = app_uris.get('volumeMounts', [])
 		temp_app['artifacts'] = []
@@ -106,7 +106,7 @@ def adapt_apps_to_pod( apps, name, app_server_address ):
 	return ( json.dumps(pod_apps), hostPath )
 
 
-def adapt_app_volumes_for_uri( app, app_server_address ):
+def adapt_app_volumes_for_uri( app ):
 	"""
 	converts a marathon app with a list of container volumes with links to current directory in a
 	marathon app wih a list of uris to be downloaded from a web server.
@@ -116,6 +116,11 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 	new_app = app.copy()
 	new_app['volumeMounts'] = []
 	hostPath = ""
+	#find out my address
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	s.connect(("8.8.8.8", 53))
+	my_address = print(s.getsockname()[0])
+	s.close()
 
 	#modify all volumes in the groups apps so that "this directory" volumes become external or downloaded from URI
 	for volume in new_app.get('container',{}).get('volumes', {}):
@@ -134,9 +139,9 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 				#print("**DEBUG: container_id is {0}".format(container_id))
 				#print("**DEBUG: volume_containerPath is {0}".format(volume_containerPath))
 				#print("**DEBUG: app_server_address is {0}".format(app_server_address))				
-				artifact_name = create_artifact_from_volume( volume, app_id+'-'+container_id+'-'+volume_containerPath, app_server_address )
+				artifact_name = create_artifact_from_volume( volume, app_id+'-'+container_id+'-'+volume_containerPath)
 				#print("**DEBUG: ARTIFACT NAME is {0}".format(artifact_name))
-				uri = "http://"+app_server_address+"/"+artifact_name
+				uri = "http://"+my_address+"/"+artifact_name
 				if 'uris' in new_app:
 					new_app['uris'].append( uri )
 				else:
@@ -154,9 +159,9 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 
 	return( new_app, hostPath )
 
-def create_artifact_from_volume( volume, app_name, app_server_address ):
+def create_artifact_from_volume( volume, app_name ):
 	"""
-	Compress and copy the application in "source_path". Upload it to "app_server_address" so that it can be downloaded as URI.
+	Compress and copy the application in "source_path". Upload it to "my_address" so that it can be downloaded as URI.
 	"""
 
 	#get firstPartOfHostPath, etc.

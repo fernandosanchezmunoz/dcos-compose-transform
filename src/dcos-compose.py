@@ -23,6 +23,7 @@ if __name__ == "__main__":
 	parser.add_argument('-n', '--name', help='name to be given to the Marathon Pod or Service Group', required=True)
 	parser.add_argument('-s', '--server', help='address of the app server to be used for artifacts', required=False)
 	parser.add_argument('-o', '--output', help='full path of the file to write output JSON to', required=False, default='output.json')
+	parser.add_argument('-g', '--group', help='create a Marathon group instead of a pod', required=False, default='output.json')	
 	args = vars( parser.parse_args() )
 
 	#print('**DEBUG: input file is {0}'.format(args['input']))
@@ -69,7 +70,10 @@ if __name__ == "__main__":
 	app_dir = os.path.dirname( args['input'] )
 	#print("**DEBUG: app_Dir is {0}".format( app_dir))	
 	os.chdir( app_dir )
-	pod = marathon_pod.create_pod( args['name'], json.dumps(containers_list), args['server'] )
+	if args['group']:
+		group - marathon_group.create_group( args['name'], json.dumps(containers_list))
+	else:	
+		pod = marathon_pod.create_pod( args['name'], json.dumps(containers_list))
 	#print("**DEBUG: POD is of type {0}".format( type(pod )))	
 	#print("**DEBUG: POD is {0}".format( pod ))
 	#print("**DEBUG: output_file is {0}".format( args['output'] ))
