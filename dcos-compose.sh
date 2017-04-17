@@ -15,6 +15,7 @@ SRC_DIR=$BASE_DIR"/src"
 CONTAINER_TRANSFORM="container-transform"
 DCOS_COMPOSE=$SRC_DIR"/dcos-compose.py"
 OUTPUT_FILE=$MARATHON_DIR"/"$APP_NAME".json"
+OUTPUT_FORWARDER_FILE=$MARATHON_DIR"/"$APP_NAME-forwarder.json
 #MARATHON_TEMP_FILE=$WORKING_DIR"/"$APP_NAME"-marathon-units.json" 
 MARATHON_TEMP_FILE=$(dirname $1)/"$APP_NAME""-marathon-units.json" 
 COMMAND_PIP_CHECK=$(pip3 -V)
@@ -23,6 +24,7 @@ MY_IP=$(ip addr show eth0 | grep -Eo \
  '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | head -1)
 MARATHON_GROUP=$SRC_DIR"/marathon_group.py" 
 MARATHON_POD=$SRC_DIR"/marathon_pod.py"
+MARATHON_FORWARDER=$SRC_DIR"/marathon_forwarder.py"
 
 
 #argument validation
@@ -65,10 +67,17 @@ $CONTAINER_TRANSFORM -i compose -o marathon $1 > $MARATHON_TEMP_FILE
 echo "***** MARATHON_TEMP.JSON *****"
 cat $MARATHON_TEMP_FILE
 $DCOS_COMPOSE -i $MARATHON_TEMP_FILE -n $APP_NAME -o $OUTPUT_FILE -s $MY_IP #produces output.json
-echo "***** OUTPUT.JSON *****"
+echo "***** POD.JSON *****"
 cat $OUTPUT_FILE
 
 dcos auth login && \
 dcos marathon pod add $OUTPUT_FILE
+
+#generate JSON for the forwarder
+$MARATHON_FORWARDER -i $OUTPUT_FILE -o $OUTPUT_FORWARDER_FILE
+echo "***** FORWARDER.JSON *****"
+cat $OUTPUT_FORWARDER_FILE
+#launch the forwarder
+dcos marathon app add $OUTPUT_FORWARDER_FILE
 
 exit 0
