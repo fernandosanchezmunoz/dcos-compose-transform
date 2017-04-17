@@ -84,15 +84,15 @@ if __name__ == "__main__":
 	#for line in json.dumps(containers):
 	#		containers_list += line.rstrip()
 	#containers_list = json.loads(containers_list)
-	print("**DEBUG: containers is {0}".format( containers ))	
+	#print("**DEBUG: containers is {0}".format( containers ))	
 	#detect if it's just one app - if so, get in list
 	if containers[0]=="{":
 		containers_list="["+containers+"]"
 	else:
 		containers_list=containers
-	print("**DEBUG: container_list is {0}".format( containers_list ))
+	#print("**DEBUG: container_list is {0}".format( containers_list ))
 	containers_list = json.loads(containers_list)
-	print("**DEBUG: container_list is of type {0}".format( type(containers_list )))	
+	#print("**DEBUG: container_list is of type {0}".format( type(containers_list )))	
 	#check if any of the containers does not have an IMAGE. FAIL if so
 	for container in containers_list:
 		print('**DEBUG: container OOP is {0}'.format(container))
@@ -103,12 +103,12 @@ if __name__ == "__main__":
 	#move to the app's base directory to run create_pod
 	current_dir = os.getcwd()
 	app_dir = os.path.dirname( args['input'] )
-	print("**DEBUG: app_Dir is {0}".format( app_dir))	
+	#print("**DEBUG: app_Dir is {0}".format( app_dir))	
 	os.chdir( app_dir )
 	pod = marathon_pod.create_pod( args['name'], json.dumps(containers_list), args['server'] )
-	print("**DEBUG: POD is of type {0}".format( type(pod )))	
-	print("**DEBUG: POD is {0}".format( pod ))
-	print("**DEBUG: output_file is {0}".format( args['output'] ))
+	#print("**DEBUG: POD is of type {0}".format( type(pod )))	
+	#print("**DEBUG: POD is {0}".format( pod ))
+	#print("**DEBUG: output_file is {0}".format( args['output'] ))
 
 	print( pod, file=open(args['output'], "w" ))
 
@@ -121,5 +121,5 @@ if __name__ == "__main__":
 	"""
 
 	os.chdir( current_dir )
-	input( "***DEBUG: Press ENTER to continue...")
+	#input( "***DEBUG: Press ENTER to continue...")
 	sys.exit(0)
