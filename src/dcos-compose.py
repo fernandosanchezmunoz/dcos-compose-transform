@@ -14,43 +14,6 @@ import argparse
 import json
 
 if __name__ == "__main__":
-	"""
-	///THIS BLOCK IS COMING FROM MARATHON_POD WHICH IS NOW A MODULE. COULD BE REUSED???
-	#parse command line arguments
-	parser = argparse.ArgumentParser(description='Convert a list of containers to a Marathon Pod.', \
-		usage='marathon_pod.py -i [container_list_filename] -n [group_name] [-g]'
-		)
-	parser.add_argument('-i', '--input', help='name of the file including the list of containers', required=True)
-	parser.add_argument('-n', '--name', help='name to be given to the Marathon Service Group', required=True)
-	parser.add_argument('-s', '--server', help='address of the app server to be used for artifacts', required=False)
-	parser.add_argument('-o', '--output', help='name of the file to write output JSON to', required=False, default='output.json')
-	args = vars( parser.parse_args() )
-	
-	#remove the trailing \n from file
-	containers = ""
-	for line in open( args['input'], 'r' ):
-		containers += line.rstrip()
-	#detect if it's just one app - if so, get in list
-	if containers[0]=="{":
-		containers="["+containers+"]"
-	#check if any of the containers does not have an IMAGE. FAIL if so
-	print("**DEBUG: containers is {0}".format( containers ))
-	for container in json.loads(containers):
-		print('**DEBUG: container is {0}'.format(container))
-		if not 'image' in container.get('container',{}).get('docker',{}):
-			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(container['id']))
-			exit(1)
-	output_file=open( args['output'], "w")
-	pod = create_pod( args['name'], containers, args['server'] )
-
-	print( pod, file=output_file )
-
-	input( "***DEBUG: Press ENTER to continue...")
-	sys.exit(0)
-	"""
-
-	logging.basicConfig(level=logging.INFO)
-	logger = logging.getLogger(__name__)
 
 	#parse command line arguments
 	parser = argparse.ArgumentParser(description='Convert a list of containers to a Marathon Pod.', \
