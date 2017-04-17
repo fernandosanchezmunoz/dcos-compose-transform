@@ -65,7 +65,7 @@ if __name__ == "__main__":
 		mapping = { 			
 			"containerPort" : 80,
 			"hostPort" : 0,
-			"servicePort" : vip_port
+			"servicePort" : int(vip_port)
 			} 
 		forwarder['container']['docker']['portMappings'].append( mapping )
 
