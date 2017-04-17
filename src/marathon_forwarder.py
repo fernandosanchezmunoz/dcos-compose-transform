@@ -33,9 +33,9 @@ if __name__ == "__main__":
 	for container in marathon_pod.get( 'containers', [] ):
 		for endpoint in container.get( 'endpoints', [] ):
 			if 'VIP_0' in endpoint.get( 'labels', {} ):
-				print('** DEBUG: labels is {}'.format(endpoint.get( 'labels', {} )))
+				#print('** DEBUG: labels is {}'.format(endpoint.get( 'labels', {} )))
 				vips.append( endpoint.get( 'labels', {} ).get( 'VIP_0', '' ) )
-				print('** DEBUG: VIPs is {}'.format(vips))
+				#print('** DEBUG: VIPs is {}'.format(vips))
 
 	#list of VIPs is attached to the forwarders JSON definitino
 	forwarder = {}
@@ -57,10 +57,10 @@ if __name__ == "__main__":
 		} )
 	forwarder['labels'] = { "HAPROXY_GROUP": "external" }
 	for index, vip in enumerate( vips ):
-		print('**DEBUG: vip is {} of type {}'.format(vip, type(vip)))
+		#print('**DEBUG: vip is {} of type {}'.format(vip, type(vip)))
 		vip_port = vip[-4:]
 		vip_name = vip[1:-5]
-		print("**DEBUG: vip_name is {0} and vip_port is {1}".format(vip_name, vip_port))
+		#print("**DEBUG: vip_name is {0} and vip_port is {1}".format(vip_name, vip_port))
 		forwarder['labels']['HAPROXY_'+str(index)+'_BACKEND_SERVER_OPTIONS'] = "server "+vip_name+" "+vip_name+".marathon.l4lb.thisdcos.directory:"+vip_port
 		mapping = { 			
 			"containerPort" : 80,
