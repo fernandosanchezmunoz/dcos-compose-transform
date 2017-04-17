@@ -5,6 +5,7 @@
 # Author: Fernando Sanchez [ fernando at mesosphere.com ]
 
 import os
+import sys
 import subprocess
 import marathon_group
 import marathon_pod
@@ -69,7 +70,7 @@ if __name__ == "__main__":
 			containers = input_file.read()
 	except (OSError, IOError):
 		logger.error("File {0} not found".format( args['input'] ))
-		exit(1)
+		sys.exit(1)
 
 	#translate it with container-transform and get the result
 	#command = "container-transform -i compose -o marathon "+args['input']
