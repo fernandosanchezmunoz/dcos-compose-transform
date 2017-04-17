@@ -33,9 +33,9 @@ if __name__ == "__main__":
 	for container in marathon_pod.get( 'containers', [] ):
 		for endpoint in container.get( 'endpoints', [] ):
 			for label in endpoint.get( 'labels', {} ):
-				print("**DEBUG: label is {0}".format(label))
-				print("**DEBUG: label is of type {0}".format(type(label)))
-				if 'VIP_0' in label:
+				print("**DEBUG: label is {0}".format(json.loads(label))
+				print("**DEBUG: label is of type {0}".format(type(json.loads(label)))
+				if 'VIP_0' in json.loads(label):
 					vips.append( label['VIP_0'] )
 
 	#list of VIPs is attached to the forwarders JSON definitino
