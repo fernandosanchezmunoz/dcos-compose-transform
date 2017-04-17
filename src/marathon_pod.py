@@ -96,7 +96,7 @@ def adapt_apps_to_pod( apps, name, app_server_address ):
 			#hostPort is now containerPort
 			endpoint['hostPort'] = portMapping['containerPort']
 			endpoint['protocol'] = [ portMapping['protocol'] ]
-			endpoint['labels'] = { "VIP_0": "/"+name+":"+str(endpoint['hostPort']) }
+			endpoint['labels'] = { "VIP_0": "/"+name.replace('-','')+":"+str(endpoint['hostPort']) }
 			temp_app['endpoints'].append(endpoint)
 		temp_app['image'] = { } 
 		temp_app['image']['kind'] = container['type']
