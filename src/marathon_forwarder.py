@@ -64,7 +64,7 @@ if __name__ == "__main__":
 		forwarder['labels']['HAPROXY_'+str(index)+'_BACKEND_SERVER_OPTIONS'] = vip_name+".marathon.l4lb.thisdcos.directory:"+vip_port
 		mapping = { 			
 			"containerPort" : 80,
-			"hostPort" : 0
+			"hostPort" : 0,
 			"servicePort" : vip_port
 			} 
 		forwarder['container']['docker']['portMappings'].append( mapping )
