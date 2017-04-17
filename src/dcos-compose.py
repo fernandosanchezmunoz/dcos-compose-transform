@@ -62,7 +62,7 @@ if __name__ == "__main__":
 	parser.add_argument('-o', '--output', help='full path of the file to write output JSON to', required=False, default='output.json')
 	args = vars( parser.parse_args() )
 
-	print('**DEBUG: input file is {0}'.format(args['input']))
+	#print('**DEBUG: input file is {0}'.format(args['input']))
 
 	#get the docker compose file
 	try:
@@ -96,7 +96,7 @@ if __name__ == "__main__":
 	#print("**DEBUG: container_list is of type {0}".format( type(containers_list )))	
 	#check if any of the containers does not have an IMAGE. FAIL if so
 	for container in containers_list:
-		print('**DEBUG: container OOP is {0}'.format(container))
+		#print('**DEBUG: container OOP is {0}'.format(container))
 		if not 'image' in container.get('container',{}).get('docker',{}):
 			print("**ERROR: Container {0} does not include an IMAGE. Please edit and re-run.".format(container['id']))
 			exit(1)
