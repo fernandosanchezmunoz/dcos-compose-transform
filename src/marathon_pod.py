@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# marathon_group.py: generate a Marathon Service Pod or Group out of a list of containers
+# marathon_group.py: generate a Marathon Service Pod out of a list of containers
 #
 # Author: Fernando Sanchez [ fernando at mesosphere.com ]
 
@@ -81,10 +81,6 @@ def adapt_apps_to_pod( apps, name, app_server_address ):
 			temp_app['artifacts'].append( { 
 				"uri": uri
 				} )
-			#TODO: trick to download URI content to "/src" as NPM starts there
-			#temp_app['exec'] = {}
-			#temp_app['exec']['command'] = {}
-			#temp_app['exec']['command']['shell'] = COMMAND
 		#adapt port mappings
 		temp_app['endpoints'] = []
 		container = app_uris['container']  #container is embedded in app
@@ -125,10 +121,7 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 	for volume in new_app.get('container',{}).get('volumes', {}):
 			#print("**DEBUG: VOLUME is {0}".format(volume))
 			if volume['hostPath'][:2] == "./":			#if the volume is "this dir" for compose
-				#FIRST CASE: using external persistent volumes, map ./DIR to a volume called DIR
-				#volume = modify_volume_for_external( volume, group_dict['id']+'-'+app['id'] )	
-						#modify it so that the local files are reachable via external volume
-				#SECOND CASE: generate an artifact with the code in the local volume and add it as a URI
+				#generate an artifact with the code in the local volume and add it as a URI
 				#find path where this will be mounted in the host for the pod
 				hostPath = volume['hostPath'][2:]
 				#print("**DEBUG: hostPath is {0}".format(hostPath))
