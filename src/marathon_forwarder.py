@@ -60,6 +60,7 @@ if __name__ == "__main__":
 		} )
 	forwarder['labels'] = { "HAPROXY_GROUP": "external" }
 	for vip, index in enumerate( vips ):
+		print('**DEBUG: vip is {} of type {}'.format(vip, type(vip)))
 		vip_port = vip[:4]
 		vip_name = vip[1:4]
 		print("**DEBUG: vip_name is {0} and vip_port is {1}".format(vip_name, vip_port))
