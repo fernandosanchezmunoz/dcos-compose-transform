@@ -48,10 +48,12 @@ if __name__ == "__main__":
 	forwarder['container']['docker']['image'] = "nginx"
 	forwarder['container']['docker']['network'] = "BRIDGE"
 	forwarder['container']['docker']['portMappings'] = []
-	forwarder['container']['docker']['portMappings'].append( { 
-		"containerPort" : 80,
-		"hostPort" : 0
-		} )
+	for vip in vips:
+		forwarder['container']['docker']['portMappings'].append( { 
+			"containerPort" : 80,
+			"hostPort" : 0
+			"servicePort" : vip[-4:]
+			} )
 	forwarder['healthChecks'] = []
 	forwarder['healthChecks'].append( {
 		"path" : "/",
