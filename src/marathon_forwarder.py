@@ -48,12 +48,7 @@ if __name__ == "__main__":
 	forwarder['container']['docker']['image'] = "nginx"
 	forwarder['container']['docker']['network'] = "BRIDGE"
 	forwarder['container']['docker']['portMappings'] = []
-	for vip in vips:
-		forwarder['container']['docker']['portMappings'].append( { 
-			"containerPort" : 80,
-			"hostPort" : 0
-			"servicePort" : vip[-4:]
-			} )
+
 	forwarder['healthChecks'] = []
 	forwarder['healthChecks'].append( {
 		"path" : "/",
@@ -67,6 +62,12 @@ if __name__ == "__main__":
 		vip_name = vip[1:-5]
 		print("**DEBUG: vip_name is {0} and vip_port is {1}".format(vip_name, vip_port))
 		forwarder['labels']['HAPROXY_'+str(index)+'_BACKEND_SERVER_OPTIONS'] = vip_name+".marathon.l4lb.thisdcos.directory:"+vip_port
+		mapping = { 			
+			"containerPort" : 80,
+			"hostPort" : 0
+			"servicePort" : vip_port
+			} 
+		forwarder['container']['docker']['portMappings'].append( mapping )
 
 	print( json.dumps( forwarder ), file=open(args['output'], "w" ))
 
