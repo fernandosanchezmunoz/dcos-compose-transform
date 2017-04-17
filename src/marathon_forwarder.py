@@ -59,12 +59,12 @@ if __name__ == "__main__":
 		"portIndex" : 0
 		} )
 	forwarder['labels'] = { "HAPROXY_GROUP": "external" }
-	for vip, index in enumerate( vips ):
+	for index, vip in enumerate( vips ):
 		print('**DEBUG: vip is {} of type {}'.format(vip, type(vip)))
 		vip_port = vip[:4]
 		vip_name = vip[1:4]
 		print("**DEBUG: vip_name is {0} and vip_port is {1}".format(vip_name, vip_port))
-		forwarder['labels']['HAPROXY_'+str(index-1)+BACKEND_SERVER_OPTIONS] = vip_name+".marathon.l4lb.thisdcos.directory:"+vip_port
+		forwarder['labels']['HAPROXY_'+str(index)+BACKEND_SERVER_OPTIONS] = vip_name+".marathon.l4lb.thisdcos.directory:"+vip_port
 
 	print( json.dumps( forwarder ), file=open(args['output'], "w" ))
 
