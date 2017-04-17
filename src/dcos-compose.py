@@ -78,8 +78,6 @@ if __name__ == "__main__":
 	#containers = out.decode('utf-8')
 	#print("**DEBUG: containers pre-rstrip is {0}".format( containers ))	
 
-	
-
 	#remove the trailing \n from file
 	#convert to string
 	containers_list = ""
@@ -90,6 +88,8 @@ if __name__ == "__main__":
 	#detect if it's just one app - if so, get in list
 	if containers[0]=="{":
 		containers_list="["+containers+"]"
+	else:
+		containers_list=containers
 	print("**DEBUG: container_list is {0}".format( containers_list ))
 	containers_list = json.loads(containers_list)
 	print("**DEBUG: container_list is of type {0}".format( type(containers_list )))	
@@ -111,6 +111,15 @@ if __name__ == "__main__":
 	print("**DEBUG: output_file is {0}".format( args['output'] ))
 
 	print( pod, file=open(args['output'], "w" ))
+
+	#TODO: create MLB-forwarder
+	"""
+	"labels": {
+    	"HAPROXY_0_BACKEND_SERVER_OPTIONS": "server composeapp.marathon.l4lb.thisdcos.directory:3000",
+    	"HAPROXY_GROUP": "external"
+  	}
+	"""
+
 	os.chdir( current_dir )
 	input( "***DEBUG: Press ENTER to continue...")
 	sys.exit(0)
