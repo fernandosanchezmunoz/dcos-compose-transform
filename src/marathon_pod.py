@@ -72,9 +72,9 @@ def adapt_apps_to_pod( apps, name, app_server_address ):
 		"mem": app_mem
 		}
 		#adapt volumes
-		print("**DEBUG: app is {0}".format(app))
+		#print("**DEBUG: app is {0}".format(app))
 		app_uris, hostPath = adapt_app_volumes_for_uri( app, app_server_address )
-		print("**DEBUG: app with URIs is {0}".format(app_uris))
+		#print("**DEBUG: app with URIs is {0}".format(app_uris))
 		temp_app['volumeMounts'] = app_uris.get('volumeMounts', [])
 		temp_app['artifacts'] = []
 		for uri in app_uris.get( 'uris', [] ):
@@ -88,7 +88,7 @@ def adapt_apps_to_pod( apps, name, app_server_address ):
 		#adapt port mappings
 		temp_app['endpoints'] = []
 		container = app_uris['container']  #container is embedded in app
-		print("**DEBUG: container is {0}".format(container))
+		#print("**DEBUG: container is {0}".format(container))
 		for portMapping in container.get('docker', {}).get('portMappings', {}):
 			endpoint = {}
 			endpoint['name'] = name+str(portMapping['containerPort'])
@@ -96,17 +96,17 @@ def adapt_apps_to_pod( apps, name, app_server_address ):
 			#hostPort is now containerPort
 			endpoint['hostPort'] = portMapping['containerPort']
 			endpoint['protocol'] = [ portMapping['protocol'] ]
-			endpoint['labels'] = { "VIP_0": "/"+temp_app['name']+":"+str(endpoint['hostPort']) }
+			endpoint['labels'] = { "VIP_0": "/"+name+":"+str(endpoint['hostPort']) }
 			temp_app['endpoints'].append(endpoint)
 		temp_app['image'] = { } 
 		temp_app['image']['kind'] = container['type']
 		temp_app['image']['id'] = container['docker']['image']
-		print("**DEBUG: temp_app is {0}".format(temp_app))
+		#print("**DEBUG: temp_app is {0}".format(temp_app))
 		pod_apps.append(temp_app)
-		print("**DEBUG: pod_apps is {0}".format(pod_apps))
+		#print("**DEBUG: pod_apps is {0}".format(pod_apps))
 
 
-	print("**DEBUG: pod_apps is {0}".format(pod_apps))
+	#print("**DEBUG: pod_apps is {0}".format(pod_apps))
 	return ( json.dumps(pod_apps), hostPath )
 
 
@@ -115,7 +115,7 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 	converts a marathon app with a list of container volumes with links to current directory in a
 	marathon app wih a list of uris to be downloaded from a web server.
 	"""
-	print("**DEBUG: APP is {0}".format(app))
+	#print("**DEBUG: APP is {0}".format(app))
 
 	new_app = app.copy()
 	new_app['volumeMounts'] = []
@@ -123,7 +123,7 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 
 	#modify all volumes in the groups apps so that "this directory" volumes become external or downloaded from URI
 	for volume in new_app.get('container',{}).get('volumes', {}):
-			print("**DEBUG: VOLUME is {0}".format(volume))
+			#print("**DEBUG: VOLUME is {0}".format(volume))
 			if volume['hostPath'][:2] == "./":			#if the volume is "this dir" for compose
 				#FIRST CASE: using external persistent volumes, map ./DIR to a volume called DIR
 				#volume = modify_volume_for_external( volume, group_dict['id']+'-'+app['id'] )	
@@ -131,18 +131,18 @@ def adapt_app_volumes_for_uri( app, app_server_address ):
 				#SECOND CASE: generate an artifact with the code in the local volume and add it as a URI
 				#find path where this will be mounted in the host for the pod
 				hostPath = volume['hostPath'][2:]
-				print("**DEBUG: hostPath is {0}".format(hostPath))
+				#print("**DEBUG: hostPath is {0}".format(hostPath))
 				app_id=new_app.get('id', {})
 				container_id=new_app.get('container', {}).get('docker',{}).get('image',"")
 				volume_containerPath=volume.get('containerPath', {}).replace('/','_')
-				print("**DEBUG: new_app is {0}".format(new_app))				
-				print("**DEBUG: volume is {0}".format(volume))
-				print("**DEBUG: app_id is {0}".format(app_id))
-				print("**DEBUG: container_id is {0}".format(container_id))
-				print("**DEBUG: volume_containerPath is {0}".format(volume_containerPath))
-				print("**DEBUG: app_server_address is {0}".format(app_server_address))				
+				#print("**DEBUG: new_app is {0}".format(new_app))				
+				#print("**DEBUG: volume is {0}".format(volume))
+				#print("**DEBUG: app_id is {0}".format(app_id))
+				#print("**DEBUG: container_id is {0}".format(container_id))
+				#print("**DEBUG: volume_containerPath is {0}".format(volume_containerPath))
+				#print("**DEBUG: app_server_address is {0}".format(app_server_address))				
 				artifact_name = create_artifact_from_volume( volume, app_id+'-'+container_id+'-'+volume_containerPath, app_server_address )
-				print("**DEBUG: ARTIFACT NAME is {0}".format(artifact_name))
+				#print("**DEBUG: ARTIFACT NAME is {0}".format(artifact_name))
 				uri = "http://"+app_server_address+"/"+artifact_name
 				if 'uris' in new_app:
 					new_app['uris'].append( uri )
@@ -187,10 +187,10 @@ def create_artifact_from_volume( volume, app_name, app_server_address ):
 	if os.path.isdir(host_path):
 		container_dir = container_path
 		host_dir = host_path
-		print("**DEBUG: source host path is dir: {0} and container dirname will be {1}".format(os.getcwd()+host_path[1:], container_dir) ) #remove leading slash
+		#print("**DEBUG: source host path is dir: {0} and container dirname will be {1}".format(os.getcwd()+host_path[1:], container_dir) ) #remove leading slash
 	else:
 		container_dir = os.path.dirname(container_path)
-		print("**DEBUG: source host path is file: {0} and container dirname will be {1}".format(host_path[1:], container_dir) ) #remove leading slash		
+		#print("**DEBUG: source host path is file: {0} and container dirname will be {1}".format(host_path[1:], container_dir) ) #remove leading slash		
 
 	staging_app_dir =staging_mount_point+"/"+app_name # /tmp/ctransform/nginx-php-group-web
 	staging_container_path = staging_app_dir+container_dir #/tmp/ctransform/nginx-php-group-web/etc/nginx/conf.d
@@ -198,12 +198,12 @@ def create_artifact_from_volume( volume, app_name, app_server_address ):
 	#command = "sudo mkdir -p "+staging_container_path
 	#proc = subprocess.Popen( command, stdout=subprocess.PIPE, shell=True)
 	#(out, err) = proc.communicate()
-	print("**DEBUG: Create staging app dir {0}".format(staging_app_dir) ) #remove leading slash
+	#print("**DEBUG: Create staging app dir {0}".format(staging_app_dir) ) #remove leading slash
 	command = "sudo mkdir -p "+staging_app_dir
 	proc = subprocess.Popen( command, stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()			
 
-	input( "***DEBUG: Press ENTER to continue...")
+	#input( "***DEBUG: Press ENTER to continue...")
 	#copy contents to staging dir
 	#if it's a directory, add "/." to copy contents not directory
 	host_path_to_copy=host_path
@@ -217,12 +217,12 @@ def create_artifact_from_volume( volume, app_name, app_server_address ):
 
 	#this copies ./app
 	#test for Node.JS -- suspect it doesn't go into staging_container_path and instead it executes from staging_app_dir. Copy there
-	print("**DEBUG: Copy {0} into {1}".format(host_path_to_copy, staging_app_dir))
+	#print("**DEBUG: Copy {0} into {1}".format(host_path_to_copy, staging_app_dir))
 	command = "cp -r "+host_path_to_copy+" "+staging_app_dir+"/"+last_part_of_container_path
 	proc = subprocess.Popen( command, stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()
 
-	input( "***DEBUG: Press ENTER to continue...")
+	#input( "***DEBUG: Press ENTER to continue...")
 
 	#compress staging_dir to artifact
 	#create an artifact name inside the staging dir
@@ -234,31 +234,31 @@ def create_artifact_from_volume( volume, app_name, app_server_address ):
 	#(out, err) = proc.communicate()
 
 
-	print("**DEBUG: cd to {0} ".format(staging_app_dir))
+	#print("**DEBUG: cd to {0} ".format(staging_app_dir))
 	command = "cd "+staging_app_dir
 	proc = subprocess.Popen( command, stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()
 
-	input( "***DEBUG: Press ENTER to continue...")
+	#input( "***DEBUG: Press ENTER to continue...")
 
-	print("**DEBUG: Compress {0} into {1} with relative path {2}".format(staging_app_dir, artifact_name, staging_app_dir ))
+	#print("**DEBUG: Compress {0} into {1} with relative path {2}".format(staging_app_dir, artifact_name, staging_app_dir ))
 	command = "tar -czvf "+staging_app_dir+"/"+artifact_name+" -C "+staging_app_dir+" ." #compress this directory
 	proc = subprocess.Popen( command, stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()
 
-	input( "***DEBUG: Press ENTER to continue...")
+	#input( "***DEBUG: Press ENTER to continue...")
 
 	#TODO: put artifact in web server
 
 	#move to web server
 	web_server_location="/root/DCOS_install/genconf/serve"
-	print("**DEBUG: mv {0} into {1}".format(staging_app_dir+"/"+artifact_name, web_server_location))
+	#print("**DEBUG: mv {0} into {1}".format(staging_app_dir+"/"+artifact_name, web_server_location))
 	command = "mv "+staging_app_dir+"/"+artifact_name+" "+web_server_location
 	proc = subprocess.Popen( command, stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()
 
 	#remove staging_dir 
-	print("**DEBUG: Remove {0}".format(staging_app_dir))
+	#print("**DEBUG: Remove {0}".format(staging_app_dir))
 	command = "rm -Rf "+staging_app_dir 
 	proc = subprocess.Popen( command, stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()
