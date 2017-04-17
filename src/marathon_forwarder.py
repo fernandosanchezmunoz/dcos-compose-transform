@@ -59,7 +59,7 @@ if __name__ == "__main__":
 		} )
 	forwarder['labels'] = { "HAPROXY_GROUP": "external" }
 	for vip, index in enumerate( vips ):
-		forwarder['labels']['HAPROXY_'+str(index-1)+BACKEND_SERVER_OPTIONS]: vip
+		forwarder['labels']['HAPROXY_'+str(index-1)+BACKEND_SERVER_OPTIONS] = vip
 
 	print( json.dumps( forwarder ), file=open(args['output'], "w" ))
 
