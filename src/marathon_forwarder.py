@@ -33,6 +33,8 @@ if __name__ == "__main__":
 	for container in marathon_pod.get( 'containers', [] ):
 		for endpoint in container.get( 'endpoints', [] ):
 			for label in endpoint.get( 'labels', {} ):
+				print("**DEBUG: label is {0}".format(label))
+				print("**DEBUG: label is of type {0}".format(typeof(label)))
 				if 'VIP_0' in label:
 					vips.append( label['VIP_0'] )
 
@@ -59,7 +61,10 @@ if __name__ == "__main__":
 		} )
 	forwarder['labels'] = { "HAPROXY_GROUP": "external" }
 	for vip, index in enumerate( vips ):
-		forwarder['labels']['HAPROXY_'+str(index-1)+BACKEND_SERVER_OPTIONS] = vip
+		vip_port = vip[:4]
+		vip_name = vip[1:4]
+		print("**DEBUG: vip_name is {0} and vip_port is {1}".format(vip_name, vip_port))
+		forwarder['labels']['HAPROXY_'+str(index-1)+BACKEND_SERVER_OPTIONS] = vip_name+".marathon.l4lb.thisdcos.directory:"+vip_port
 
 	print( json.dumps( forwarder ), file=open(args['output'], "w" ))
 
