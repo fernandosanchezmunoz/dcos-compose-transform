@@ -66,6 +66,8 @@ if __name__ == "__main__":
 			"containerPort" : 80,
 			"hostPort" : 0,
 			"servicePort" : int(vip_port)
+		}
+		forwarder['container']['docker']['portMappings'].append( mapping )
 
 	print( json.dumps( forwarder ), file=open(args['output'], "w" ))
 
